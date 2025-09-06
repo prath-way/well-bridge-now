@@ -228,9 +228,17 @@ const HealthRecords = () => {
 
         {/* Vitals */}
         <TabsContent value="vitals" className="space-y-6">
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-semibold">Latest Vital Signs</h3>
+            <Button>
+              <Plus className="w-4 h-4 mr-2" />
+              Record Vitals
+            </Button>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {vitals.map((vital) => (
-              <Card key={vital.label} className="shadow-card">
+              <Card key={vital.label} className="shadow-card hover:shadow-soft transition-all duration-200 cursor-pointer">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-medium">{vital.label}</h3>
@@ -254,22 +262,66 @@ const HealthRecords = () => {
             ))}
           </div>
 
-          <Card className="shadow-card">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="w-5 h-5" />
-                Vital Trends
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-64 flex items-center justify-center text-muted-foreground">
-                <div className="text-center">
-                  <Activity className="w-12 h-12 mx-auto mb-3" />
-                  <p>Vital signs chart would be displayed here</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="shadow-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Activity className="w-5 h-5" />
+                  Blood Pressure Trends (Last 30 Days)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[
+                    { date: '2024-03-10', systolic: 120, diastolic: 80 },
+                    { date: '2024-03-08', systolic: 118, diastolic: 78 },
+                    { date: '2024-03-05', systolic: 122, diastolic: 82 },
+                    { date: '2024-03-01', systolic: 125, diastolic: 85 }
+                  ].map((reading, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                      <span className="text-sm text-muted-foreground">{reading.date}</span>
+                      <span className="font-medium">{reading.systolic}/{reading.diastolic} mmHg</span>
+                      <Badge variant="secondary" className="bg-secondary-soft text-secondary">Normal</Badge>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Heart className="w-5 h-5" />
+                  Heart Rate Monitoring
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="text-center p-6 bg-gradient-soft rounded-2xl">
+                    <div className="text-4xl font-bold text-primary mb-2">72</div>
+                    <div className="text-muted-foreground">Average BPM</div>
+                    <Badge variant="secondary" className="mt-2 bg-secondary-soft text-secondary">
+                      Normal Range
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-center text-sm">
+                    <div>
+                      <div className="font-semibold text-primary">68</div>
+                      <div className="text-muted-foreground">Resting</div>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-accent">95</div>
+                      <div className="text-muted-foreground">Active</div>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-secondary">165</div>
+                      <div className="text-muted-foreground">Max</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
         {/* Medications */}
@@ -320,15 +372,93 @@ const HealthRecords = () => {
 
         {/* Timeline */}
         <TabsContent value="timeline" className="space-y-4">
-          <Card className="shadow-card">
-            <CardContent className="p-8 text-center">
-              <Calendar className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Health Timeline</h3>
-              <p className="text-muted-foreground">
-                A chronological view of your health journey will be displayed here
-              </p>
-            </CardContent>
-          </Card>
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-semibold">Health Timeline</h3>
+            <Button variant="outline">
+              <Download className="w-4 h-4 mr-2" />
+              Export Timeline
+            </Button>
+          </div>
+
+          <div className="space-y-6">
+            {[
+              {
+                date: '2024-03-10',
+                type: 'checkup',
+                title: 'Annual Physical Checkup',
+                doctor: 'Dr. Sarah Chen',
+                results: 'All vitals normal. Recommended continued healthy lifestyle.',
+                icon: Heart
+              },
+              {
+                date: '2024-03-08',
+                type: 'lab',
+                title: 'Blood Work Complete',
+                doctor: 'Dr. Michael Rodriguez',
+                results: 'Cholesterol levels improved. Blood sugar within normal range.',
+                icon: TestTube
+              },
+              {
+                date: '2024-03-05',
+                type: 'consultation',
+                title: 'Cardiology Follow-up',
+                doctor: 'Dr. Sarah Chen',
+                results: 'Heart function excellent. No concerns noted.',
+                icon: Activity
+              },
+              {
+                date: '2024-02-15',
+                type: 'prescription',
+                title: 'Medication Started',
+                doctor: 'Dr. Sarah Chen',
+                results: 'Started Lisinopril 10mg for blood pressure management.',
+                icon: Pill
+              }
+            ].map((event, index) => (
+              <Card key={index} className="shadow-card hover:shadow-soft transition-all duration-200">
+                <CardContent className="p-6">
+                  <div className="flex gap-4">
+                    <div className="flex flex-col items-center">
+                      <div className="w-12 h-12 bg-primary-soft rounded-full flex items-center justify-center mb-2">
+                        <event.icon className="w-6 h-6 text-primary" />
+                      </div>
+                      {index < 3 && (
+                        <div className="w-0.5 h-16 bg-border"></div>
+                      )}
+                    </div>
+                    
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-semibold text-lg">{event.title}</h3>
+                        <span className="text-sm text-muted-foreground">
+                          {new Date(event.date).toLocaleDateString()}
+                        </span>
+                      </div>
+                      
+                      <p className="text-muted-foreground mb-2">
+                        <span className="font-medium">{event.doctor}</span>
+                      </p>
+                      
+                      <p className="text-foreground bg-muted/50 p-3 rounded-lg">
+                        {event.results}
+                      </p>
+                      
+                      <div className="flex gap-2 mt-3">
+                        <Button variant="outline" size="sm">
+                          <Eye className="w-4 h-4 mr-1" />
+                          View Details
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <Share2 className="w-4 h-4 mr-1" />
+                          Share
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
       </Tabs>
     </div>
